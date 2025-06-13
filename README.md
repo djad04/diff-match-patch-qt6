@@ -6,16 +6,26 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)]()
 
 > **A complete reimplementation of Google's diff-match-patch for Qt6, designed to leverage the full power of the latest Qt features.**
+Unlike the original Qt4 version, this port eliminates deprecated components and optimizes the core algorithm for modern C++ and Qt6, offering robust support for diffing, patching, and pattern matching with enhanced precision for development workflows.
 
-Unlike the original Qt4 version, this port eliminates deprecated components and optimizes the core algorithm for modern C++ and Qt6, offering robust support for diffing, patching, and pattern matching. It is header-only, making it simple to integrate with minimal dependencies.
+
+## 🚨🔴 MODIFIED ALGORITHM WARNING
+
+> ⚠️ **This implementation has been _modified from Google’s original_ to prioritize _maximum precision and detailed diffs_, with _timeout limitations removed_ for complete accuracy.**
+
+✅ **Best for**: Code files up to **1MB (~12,000 lines)** where human-readable, precise results are essential.  
+⚠️ **For larger files**: Consider performance-optimized algorithms like **Myers** or **Patience diff**.
+
+🧩 However, _those alternatives are more complex to integrate_, often requiring **multiple source files and additional dependencies**, whereas **this implementation is extremely easy to set up and use**, making it ideal for lightweight or embedded tools.
 
 ## Features
 
-- Header-only library
-- Qt6 optimized
-- Unicode support
-- Cross-platform
-- Performance tested
+- **Enhanced Precision**: Modified algorithm for maximum accuracy (no timeout limitations)
+- **Qt6 Integration**: Native QString support and Qt-style API
+- **Unicode Support**: Full international text support
+- **Human-Readable Output**: Optimized for code analysis and development workflows
+- **Cross-platform**: Works on Windows, Linux, macOS
+- **Header-only library**: Easy integration
 
 ## Installation
 
@@ -47,15 +57,8 @@ QPair<QString, QVector<bool>> result = dmp.patch_apply(patches, "old content");
 QString newText = result.first;
 ```
 
-## Performance
 
-> **🔴 IMPORTANT: Modified Algorithm for Enhanced Performance**
->
-> This implementation has been **modified from Google's original algorithm** to provide **maximum precision** instead of speed optimization. The timeout limitations have been removed to ensure **complete and accurate diff analysis** for all file sizes.
->
-> **Trade-off**: Longer processing time for **perfect accuracy** - ideal for code analysis and file comparison tools.
-
-**Benchmark Results** (MSVC 1943, Qt 6.8.2):
+**Benchmark Results** (MSVC 2022, Qt 6.8.2):
 
 ### **Standard Performance (Modified Algorithm)**
 | File Size | Processing Time | Operations | Efficiency | Use Case |
@@ -63,10 +66,12 @@ QString newText = result.first;
 | 100 B | 0 ms | ~20 ops | Perfect | Instant |
 | 1 KB | 0 ms | ~220 ops | Perfect | Instant |
 | 10 KB | 21 ms | ~2,100 ops | Perfect | Very fast |
-| 100 KB | 1.7 s | ~21,000 ops | 95.2% | Good |
-| **1 MB** | **55 s** | **144,000 ops** | **95.2%** | **Excellent precision** |
-| **2 MB** | **192 s** | **287,000 ops** | **95.2%** | **Perfect analysis** |
-| **5 MB** | **6.1 s** | **31,550 ops** | **78%** | **Large file handling** |
+| 100 KB | 1.7 s | ~21,000 ops | 100% | Good |
+| **1 MB** | **55 s** | **144,000 ops** | **95.2%** | **Max accuracy (slow)** |
+| **2 MB** | **192 s** | **287,000 ops** | **95.2%** | **Extremely accurate, but slow** |
+| **5 MB** | **6.1 s** | **31,550 ops** | **78%** | **if going for this kind of files go for more complex robust full libraries or try a chunk loading approach(not tested for now)** |
+
+⚠️ Note: An efficiency of 95% does not mean that 5% of changes were missed — all changes are found, but the algorithm may not always find the shortest or cleanest sequence of edits possible. It’s about optimality, not correctness.
 
 ### **Noise Rate Analysis (50KB test file)**
 | Change Rate | Processing Time | Operations | Efficiency |
@@ -77,18 +82,8 @@ QString newText = result.first;
 | 20% changes | 3.9 s | 21,943 ops | 82% |
 | 50% changes | 13.4 s | 35,565 ops | 61% |
 
-### **Comparison: Original vs Modified Algorithm**
-| Algorithm | 1MB File | Operations | Efficiency | Time |
-|-----------|----------|------------|------------|------|
-| **Google Original** | 1,016 ms | 4 ops | 0.0% | Fast but inaccurate |
-| **Modified (This)** | 55,173 ms | 143,976 ops | 95.2% | Slow but precise |
 
-**Improvement**: **35,880x more operations** with **+95.2% efficiency**
-
-## Configuration
-
-```cpp
-diff_match_patch dmp;
+## Configuration(you can play with the configuration for different results)
 
 // Modified settings for maximum precision (default configuration)
 dmp.Diff_Timeout = 0.0f;        // NO TIMEOUT - Full precision mode
@@ -138,26 +133,6 @@ For files larger than 1MB (~12,000 lines of code), consider:
 ## Testing & Performance
 
 Includes comprehensive test suite with performance benchmarks in the `testing/` folder. The test benchmark validates algorithm correctness and measures performance across different file sizes and text types.
-
-**Performance Results:**
-- Process 1KB files in < 1ms
-- Handle 1MB files in < 100ms
-- Support for 10MB+ files efficiently
-- Memory-optimized algorithms
-
-**Test Coverage:**
-- Basic diff operations (insertions, deletions, modifications)
-- Unicode and emoji handling
-- Real-world scenarios (code, configs, documents)
-- Edge cases and error handling
-- Performance stress tests
-
-Run the test benchmark:
-```bash
-cd testing/
-./run_benchmark
-```
-
 
 
 ## License

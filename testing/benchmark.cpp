@@ -1,6 +1,5 @@
 #include "../diff_match_patch.h"
 #include <QCoreApplication>
-#include <QDebug>
 #include <QElapsedTimer>
 #include <QFile>
 #include <QTextStream>
@@ -10,6 +9,7 @@
 #include <QVector>
 #include <QPair>
 #include <iostream>
+#include <iomanip>
 
 class DiffBenchmark {
 private:
@@ -76,9 +76,11 @@ private:
 
 public:
     void runAllBenchmarks() {
-        qDebug() << "\n=== diff-match-patch-qt6 Performance Benchmark ===\n";
-        qDebug().noquote() << QString("%1 | %2 | %3").arg("Test", -25).arg("Size", 8).arg("Time", 8);
-        qDebug() << "------------------------------------------------";
+        std::cout << "=== diff-match-patch-qt6 Performance Benchmark ===\n\n";
+        std::cout << std::left << std::setw(25) << "Test" << " | "
+                  << std::setw(8) << "Size" << " | "
+                  << std::setw(8) << "Time" << "\n";
+        std::cout << "------------------------------------------------\n";
 
         // Basic performance tests
         testBasicPerformance();
@@ -515,16 +517,20 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
 
-    qDebug() << "Starting diff-match-patch-qt6 benchmark...";
-    qDebug() << "Qt Version:" << QT_VERSION_STR;
-    qDebug() << "Compiler:" <<
+    // Optimize stdio for faster output
+    std::ios::sync_with_stdio(false);
+
+    std::cout << "Starting diff-match-patch-qt6 benchmark...\n";
+    std::cout << "Qt Version: " << QT_VERSION_STR << "\n";
+    std::cout << "Compiler: ";
 #ifdef __GNUC__
-        "GCC" << __GNUC__ << "." << __GNUC_MINOR__;
+    std::cout << "GCC " << __GNUC__ << "." << __GNUC_MINOR__;
 #elif defined(_MSC_VER)
-        "MSVC" << _MSC_VER;
+    std::cout << "MSVC " << _MSC_VER;
 #else
-        "Unknown";
+    std::cout << "Unknown";
 #endif
+    std::cout << "\n\n";
 
     DiffBenchmark benchmark;
     benchmark.runAllBenchmarks();

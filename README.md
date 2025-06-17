@@ -4,6 +4,9 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg)]()
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)]()
+[![CI](https://github.com/djad04/diff-match-patch-qt6/actions/workflows/ci.yml/badge.svg)](https://github.com/djad04/diff-match-patch-qt6/actions/workflows/ci.yml)
+
+
 
 > **A complete reimplementation of Google's diff-match-patch for Qt6, designed to leverage the full power of the latest Qt features.**
 Unlike the original Qt4 version, this port eliminates deprecated components and optimizes the core algorithm for modern C++ and Qt6, offering robust support for diffing, patching, and pattern matching with enhanced precision for development workflows.

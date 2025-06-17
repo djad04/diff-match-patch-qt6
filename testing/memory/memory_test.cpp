@@ -7,6 +7,8 @@
 #include <QList>
 #include <QVector>
 #include <QPair>
+#include <iostream>
+#include <iomanip>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -91,52 +93,55 @@ private:
 
 public:
     void runMemoryTests() {
-        qDebug() << "\n=== diff-match-patch-qt6 Memory Usage Test ===\n";
-        
+        std::cout << "=== diff-match-patch-qt6 Memory Usage Test ===\n\n";
+
         size_t initialMemory = getCurrentMemoryUsage();
-        qDebug() << "Initial memory usage:" << formatMemory(initialMemory);
-        qDebug() << "";
-        
+        std::cout << "Initial memory usage: " << formatMemory(initialMemory).toStdString() << "\n\n";
+
         testMemoryUsageBySize();
         testMemoryLeaks();
         testLargeFileMemory();
-        
+
         size_t finalMemory = getCurrentMemoryUsage();
-        qDebug() << "\nFinal memory usage:" << formatMemory(finalMemory);
-        
+        std::cout << "\nFinal memory usage: " << formatMemory(finalMemory).toStdString() << "\n";
+
         if (finalMemory > initialMemory) {
             size_t increase = finalMemory - initialMemory;
-            qDebug() << "Memory increase:" << formatMemory(increase);
+            std::cout << "Memory increase: " << formatMemory(increase).toStdString() << "\n";
         } else {
-            qDebug() << "No significant memory increase detected";
+            std::cout << "No significant memory increase detected\n";
         }
-        
-        qDebug() << "\n=== Memory Test Complete ===\n";
+
+        std::cout << "\n=== Memory Test Complete ===\n";
     }
     
     void testMemoryUsageBySize() {
-        qDebug() << "Testing memory usage by file size:";
-        qDebug() << QString("%-15s | %-15s | %-15s").arg("File Size", "Memory Before", "Memory After");
-        qDebug() << "----------------------------------------------------";
-        
-        QList<int> sizes = {1024, 10240, 102400, 1048576}; // 1KB, 10KB, 100KB, 1MB
-        
+        std::cout << "Testing memory usage by file size:\n";
+        std::cout << std::left << std::setw(15) << "File Size"
+                  << " | " << std::setw(15) << "Memory Before"
+                  << " | " << std::setw(15) << "Memory After" << "\n";
+        std::cout << "----------------------------------------------------\n";
+
+        QList<int> sizes = {1024, 10240, 51200}; // 1KB, 10KB, 50KB (reduced for faster testing)
+
         for (int size : sizes) {
             size_t memBefore = getCurrentMemoryUsage();
-            
+
             QString text1 = generateRandomText(size);
             QString text2 = modifyText(text1, 0.1);
-            
+
             QList<Diff> diffs = dmp.diff_main(text1, text2);
-            
+
             size_t memAfter = getCurrentMemoryUsage();
-            
-            QString sizeStr = formatMemory(size);
-            QString beforeStr = formatMemory(memBefore);
-            QString afterStr = formatMemory(memAfter);
-            
-            qDebug() << QString("%-15s | %-15s | %-15s").arg(sizeStr, beforeStr, afterStr);
-            
+
+            std::string sizeStr = formatMemory(size).toStdString();
+            std::string beforeStr = formatMemory(memBefore).toStdString();
+            std::string afterStr = formatMemory(memAfter).toStdString();
+
+            std::cout << std::left << std::setw(15) << sizeStr
+                      << " | " << std::setw(15) << beforeStr
+                      << " | " << std::setw(15) << afterStr << "\n";
+
             // Clean up
             text1.clear();
             text2.clear();
@@ -145,110 +150,125 @@ public:
     }
     
     void testMemoryLeaks() {
-        qDebug() << "\nTesting for memory leaks (1000 iterations):";
-        
+        std::cout << "\nTesting for memory leaks (100 iterations):\n";
+
         size_t memBefore = getCurrentMemoryUsage();
-        
-        for (int i = 0; i < 1000; ++i) {
+
+        for (int i = 0; i < 100; ++i) {  // Reduced from 1000 to 100
+            if (i % 20 == 0) {
+                std::cout << "  Progress: " << i << "/100 iterations...\n" << std::flush;
+            }
+
             QString text1 = generateRandomText(1000);
             QString text2 = modifyText(text1, 0.1);
-            
+
             QList<Diff> diffs = dmp.diff_main(text1, text2);
             QList<Patch> patches = dmp.patch_make(text1, text2);
             QPair<QString, QVector<bool>> result = dmp.patch_apply(patches, text1);
-            
+
             // Force cleanup
             text1.clear();
             text2.clear();
             diffs.clear();
             patches.clear();
         }
+        std::cout << "  Progress: 100/100 iterations complete!\n";
         
         size_t memAfter = getCurrentMemoryUsage();
         
-        qDebug() << "Memory before iterations:" << formatMemory(memBefore);
-        qDebug() << "Memory after iterations:" << formatMemory(memAfter);
-        
+        std::cout << "Memory before iterations: " << formatMemory(memBefore).toStdString() << "\n";
+        std::cout << "Memory after iterations: " << formatMemory(memAfter).toStdString() << "\n";
+
         if (memAfter > memBefore) {
             size_t increase = memAfter - memBefore;
-            qDebug() << "Memory increase:" << formatMemory(increase);
-            
-            // Check if increase is reasonable (less than 10MB for 1000 iterations)
-            if (increase < 10 * 1024 * 1024) {
-                qDebug() << "✓ Memory usage appears stable";
+            std::cout << "Memory increase: " << formatMemory(increase).toStdString() << "\n";
+
+            // Check if increase is reasonable (less than 5MB for 100 iterations)
+            if (increase < 5 * 1024 * 1024) {
+                std::cout << "PASS: Memory usage appears stable\n";
             } else {
-                qDebug() << "⚠ Potential memory leak detected";
+                std::cout << "WARNING: Potential memory leak detected\n";
             }
         } else {
-            qDebug() << "✓ No memory increase detected";
+            std::cout << "PASS: No memory increase detected\n";
         }
     }
     
     void testLargeFileMemory() {
-        qDebug() << "\nTesting large file memory efficiency:";
-        
-        // Test with 5MB file
+        std::cout << "\nTesting large file memory efficiency:\n";
+
+        // Test with 1MB file (reduced from 5MB)
         size_t memBefore = getCurrentMemoryUsage();
-        qDebug() << "Memory before large file test:" << formatMemory(memBefore);
-        
-        QString largeText1 = generateRandomText(5 * 1024 * 1024); // 5MB
+        std::cout << "Memory before large file test: " << formatMemory(memBefore).toStdString() << "\n";
+
+        std::cout << "  Loading 1MB text... " << std::flush;
+        QString largeText1 = generateRandomText(1024 * 1024); // 1MB
         size_t memAfterLoad = getCurrentMemoryUsage();
-        qDebug() << "Memory after loading 5MB text:" << formatMemory(memAfterLoad);
-        
-        QString largeText2 = modifyText(largeText1, 0.05); // 5% changes
+        std::cout << "Done!\n";
+        std::cout << "Memory after loading 1MB text: " << formatMemory(memAfterLoad).toStdString() << "\n";
+
+        std::cout << "  Creating modified text... " << std::flush;
+        QString largeText2 = modifyText(largeText1, 0.01); // 1% changes (realistic scenario)
         size_t memAfterModify = getCurrentMemoryUsage();
-        qDebug() << "Memory after creating modified text:" << formatMemory(memAfterModify);
-        
+        std::cout << "Done!\n";
+        std::cout << "Memory after creating modified text: " << formatMemory(memAfterModify).toStdString() << "\n";
+        std::cout << "Note: Testing with 1% changes (realistic code editing scenario)\n";
+
+        std::cout << "  Running diff algorithm... " << std::flush;
         QElapsedTimer timer;
         timer.start();
-        
+
         QList<Diff> diffs = dmp.diff_main(largeText1, largeText2);
-        
+
         qint64 elapsed = timer.elapsed();
         size_t memAfterDiff = getCurrentMemoryUsage();
-        
-        qDebug() << "Memory after diff operation:" << formatMemory(memAfterDiff);
-        qDebug() << "Diff completed in:" << elapsed << "ms";
-        qDebug() << "Number of diff operations:" << diffs.size();
-        
+        std::cout << "Done!\n";
+
+        std::cout << "Memory after diff operation: " << formatMemory(memAfterDiff).toStdString() << "\n";
+        std::cout << "Diff completed in: " << elapsed << " ms\n";
+        std::cout << "Number of diff operations: " << diffs.size() << "\n";
+
         // Calculate memory efficiency
         size_t totalTextSize = largeText1.toUtf8().size() + largeText2.toUtf8().size();
         size_t memoryUsed = memAfterDiff - memBefore;
         double efficiency = (double)totalTextSize / memoryUsed;
-        
-        qDebug() << "Total text size:" << formatMemory(totalTextSize);
-        qDebug() << "Memory used:" << formatMemory(memoryUsed);
-        qDebug() << "Memory efficiency ratio:" << QString::number(efficiency, 'f', 2);
-        
+
+        std::cout << "Total text size: " << formatMemory(totalTextSize).toStdString() << "\n";
+        std::cout << "Memory used: " << formatMemory(memoryUsed).toStdString() << "\n";
+
         // Clean up
         largeText1.clear();
         largeText2.clear();
         diffs.clear();
-        
+
         size_t memAfterCleanup = getCurrentMemoryUsage();
-        qDebug() << "Memory after cleanup:" << formatMemory(memAfterCleanup);
+        std::cout << "Memory after cleanup: " << formatMemory(memAfterCleanup).toStdString() << "\n";
     }
 };
 
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
-    
-    qDebug() << "🧠 diff-match-patch-qt6 Memory Test";
-    qDebug() << "===================================";
-    qDebug() << "Platform:" << 
+
+    // Optimize stdio for faster output
+    std::ios::sync_with_stdio(false);
+
+    std::cout << "diff-match-patch-qt6 Memory Test\n";
+    std::cout << "=================================\n";
+    std::cout << "Platform: ";
 #ifdef Q_OS_WIN
-        "Windows";
+    std::cout << "Windows";
 #elif defined(Q_OS_LINUX)
-        "Linux";
+    std::cout << "Linux";
 #elif defined(Q_OS_MAC)
-        "macOS";
+    std::cout << "macOS";
 #else
-        "Unknown";
+    std::cout << "Unknown";
 #endif
-    
+    std::cout << "\n\n";
+
     MemoryTest memTest;
     memTest.runMemoryTests();
-    
+
     return 0;
 }

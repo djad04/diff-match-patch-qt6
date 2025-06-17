@@ -27,6 +27,21 @@
 #ifndef DIFF_MATCH_PATCH_H
 #define DIFF_MATCH_PATCH_H
 
+// Qt includes
+#include <QString>
+#include <QList>
+#include <QVector>
+#include <QPair>
+#include <QStringList>
+#include <QMap>
+#include <QVariant>
+#include <QRegularExpression>
+#include <QChar>
+#include <QUrl>
+
+// Standard includes
+#include <ctime>
+
 /*
  * Advanced text comparison algorithms for Qt6 applications.
  *

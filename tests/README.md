@@ -106,7 +106,7 @@ Tests run automatically on:
 ### Status Badges
 
 ```markdown
-[![CI](https://github.com/djad04/diff-match-patch-qt6/workflows/CI/badge.svg)](https://github.com/djad04/diff-match-patch-qt6/actions)
+[![CI](https://github.com/djad04/diff-match-patch-qt6/actions/workflows/ci.yml/badge.svg)](https://github.com/djad04/diff-match-patch-qt6/actions/workflows/ci.yml)
 ```
 
 ## 🔧 Configuration

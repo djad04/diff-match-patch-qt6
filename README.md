@@ -87,11 +87,6 @@ QString newText = result.first;
 | Config File | 4.9 KB | 18.19 ms | 901 ops | 78.4% |
 | Unicode Text | 4.6 KB | 28.61 ms | 1,201 ops | 58.3% |
 
-### **Algorithm Comparison (100KB file)**
-| Configuration | Time | Operations | Efficiency |
-|---------------|------|------------|------------|
-| Google Original | 602.36 ms | 14,251 ops | ~0% |
-| Modified (This) | 582.55 ms | 14,251 ops | 95.1% |
 
 
 ## Configuration(you can play with the configuration for different results)

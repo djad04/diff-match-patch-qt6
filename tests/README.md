@@ -103,12 +103,6 @@ Tests run automatically on:
 - ❌ **FAIL**: Test failures with detailed output
 - 📊 **Coverage**: Code coverage reports (Linux only)
 
-### Status Badges
-
-```markdown
-[![CI](https://github.com/djad04/diff-match-patch-qt6/actions/workflows/ci.yml/badge.svg)](https://github.com/djad04/diff-match-patch-qt6/actions/workflows/ci.yml)
-```
-
 ## 🔧 Configuration
 
 ### Algorithm Configuration

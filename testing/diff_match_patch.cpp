@@ -105,13 +105,13 @@ bool Patch::isNull() const {
 /////////////////////////////////////////////
 
 diff_match_patch::diff_match_patch() :
-  Diff_Timeout(1.0f),
+  Diff_Timeout(0.0f),       // NO TIMEOUT - Force full precision
   Diff_EditCost(4),
-  Match_Threshold(0.5f),
-  Match_Distance(1000),
-  Patch_DeleteThreshold(0.5f),
+  Match_Threshold(0.5f),    // Standard threshold for accuracy
+  Match_Distance(100000),   // Much larger search distance for big files
+  Patch_DeleteThreshold(0.5f),  // Standard threshold
   Patch_Margin(4),
-  Match_MaxBits(32) {
+  Match_MaxBits(8192) {     // Even larger pattern support for big files
 }
 
 

@@ -58,29 +58,40 @@ QString newText = result.first;
 ```
 
 
-**Benchmark Results** (MSVC 2022, Qt 6.8.2):
+**Benchmark Results** (MSVC 1943, Qt 6.8.2):
 
-### **Standard Performance (Modified Algorithm)**
-| File Size | Processing Time | Operations | Efficiency | Use Case |
-|-----------|----------------|------------|------------|----------|
-| 100 B | 0 ms | ~20 ops | Perfect | Instant |
-| 1 KB | 0 ms | ~220 ops | Perfect | Instant |
-| 10 KB | 21 ms | ~2,100 ops | Perfect | Very fast |
-| 100 KB | 1.7 s | ~21,000 ops | 100% | Good |
-| **1 MB** | **55 s** | **144,000 ops** | **95.2%** | **Max accuracy (slow)** |
-| **2 MB** | **192 s** | **287,000 ops** | **95.2%** | **Extremely accurate, but slow** |
-| **5 MB** | **6.1 s** | **31,550 ops** | **78%** | **if going for this kind of files go for more complex robust full libraries or try a chunk loading approach(not tested for now)** |
+### **Core Performance Tests**
+| File Size | Processing Time | Operations | Efficiency | Notes |
+|-----------|----------------|------------|------------|-------|
+| **100 B** | 0.13 ms | 31 ops | 90.0% | Instant response |
+| **1 KB** | 0.94 ms | 247 ops | 90.6% | Very fast |
+| **10 KB** | 49.22 ms | 2,593 ops | 90.7% | Fast processing |
+| **100 KB** | 4.35 s | 26,366 ops | 90.5% | Good precision |
+| **500 KB** | 10.60 s | 71,041 ops | 95.1% | Excellent precision |
 
 ⚠️ Note: An efficiency of 95% does not mean that 5% of changes were missed — all changes are found, but the algorithm may not always find the shortest or cleanest sequence of edits possible. It’s about optimality, not correctness.
 
 ### **Noise Rate Analysis (50KB test file)**
 | Change Rate | Processing Time | Operations | Efficiency |
 |-------------|----------------|------------|------------|
-| 1% changes | 12 ms | 1,435 ops | 99% |
-| 5% changes | 188 ms | 6,825 ops | 95% |
-| 10% changes | 1.2 s | 12,659 ops | 90% |
-| 20% changes | 3.9 s | 21,943 ops | 82% |
-| 50% changes | 13.4 s | 35,565 ops | 61% |
+| 1% changes | 11.53 ms | 1,471 ops | 99.0% |
+| 5% changes | 181.18 ms | 6,941 ops | 95.1% |
+| 10% changes | 1.10 s | 12,897 ops | 90.5% |
+| 20% changes | 2.99 s | 21,957 ops | 82.1% |
+| 50% changes | 9.92 s | 35,834 ops | 61.7% |
+
+### **Real-World Scenarios**
+| Scenario | File Size | Time | Operations | Efficiency |
+|----------|-----------|------|------------|------------|
+| JavaScript Code | 184 B | 0.10 ms | 13 ops | 73.9% |
+| Config File | 4.9 KB | 18.19 ms | 901 ops | 78.4% |
+| Unicode Text | 4.6 KB | 28.61 ms | 1,201 ops | 58.3% |
+
+### **Algorithm Comparison (100KB file)**
+| Configuration | Time | Operations | Efficiency |
+|---------------|------|------------|------------|
+| Google Original | 602.36 ms | 14,251 ops | ~0% |
+| Modified (This) | 582.55 ms | 14,251 ops | 95.1% |
 
 
 ## Configuration(you can play with the configuration for different results)

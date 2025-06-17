@@ -17,9 +17,9 @@ private:
         testsTotal++;
         if (condition) {
             testsPassed++;
-            qDebug() << "✓ PASS:" << testName;
+            qDebug() << " PASS:" << testName;
         } else {
-            qDebug() << "✗ FAIL:" << testName;
+            qDebug() << " FAIL:" << testName;
         }
     }
 

@@ -1,6 +1,6 @@
 # diff-match-patch-qt6 Tests
 
-Test suite using QTest framework and CTest integration for CI/CD.
+cross-platform test suite built using QTest framework and CTest integration for CI/CD.
 
 ## 🏗️ Structure
 
@@ -104,17 +104,12 @@ Tests run automatically on:
 - 📊 **Coverage**: Code coverage reports (Linux only)
 
 ### Status Badges
-Add to your README.md:
+
 ```markdown
 [![CI](https://github.com/yourusername/diff-match-patch-qt6/workflows/CI/badge.svg)](https://github.com/yourusername/diff-match-patch-qt6/actions)
 ```
 
 ## 🔧 Configuration
-
-### Test Timeouts
-- Unit tests: 30 seconds (default)
-- Performance tests: 300 seconds
-- Memory tests: 180 seconds
 
 ### Algorithm Configuration
 Tests use optimized settings:
@@ -123,14 +118,6 @@ dmp.Diff_Timeout = 0.0f;        // No timeout for maximum precision
 dmp.Match_Distance = 100000;    // Extended search distance
 dmp.Match_MaxBits = 8192;       // Large pattern support
 ```
-
-## 📈 Performance Expectations
-
-### Typical Results (Release build)
-- **Small files (≤10KB)**: < 50ms
-- **Medium files (≤100KB)**: < 5s  
-- **Large files (≤500KB)**: < 30s
-- **Memory efficiency**: > 90% for realistic changes (≤5%)
 
 ### Failure Criteria
 Tests fail if:
@@ -146,13 +133,6 @@ Tests fail if:
 2. Use QTest framework macros
 3. Add to CMakeLists.txt
 4. Register with CTest
-
-### Test Guidelines
-- Use descriptive test names
-- Test both success and failure cases
-- Include performance assertions
-- Verify memory cleanup
-- Test Unicode and edge cases
 
 ## 📝 Example Test
 

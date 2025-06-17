@@ -10,10 +10,12 @@ jobs:
   test:
     name: Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        qt-version: ['6.5.0']
+        qt-version: ['6.7.0']
         
     steps:
     - name: Checkout code
@@ -23,7 +25,8 @@ jobs:
       uses: jurplel/install-qt-action@v4
       with:
         version: ${{ matrix.qt-version }}
-        modules: 'qtbase'
+        cache: true
+        cache-key-prefix: install-qt-action
         
     - name: Configure CMake
       run: |
@@ -38,7 +41,7 @@ jobs:
     - name: Run tests
       run: |
         cd tests
-        ctest --test-dir build --output-on-failure --verbose
+        ctest --test-dir build --output-on-failure --timeout 300
         
     - name: Upload test results
       uses: actions/upload-artifact@v4
@@ -50,6 +53,7 @@ jobs:
   coverage:
     name: Code Coverage
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     if: github.event_name == 'push'
     
     steps:
@@ -59,8 +63,9 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: '6.5.0'
-        modules: 'qtbase'
+        version: '6.7.0'
+        cache: true
+        cache-key-prefix: install-qt-action
         
     - name: Install coverage tools
       run: |

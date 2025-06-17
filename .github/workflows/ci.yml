@@ -18,9 +18,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Install Qt
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: ${{ matrix.qt-version }}
         modules: 'qtbase'
@@ -41,7 +41,7 @@ jobs:
         ctest --test-dir build --output-on-failure --verbose
         
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: failure()
       with:
         name: test-results-${{ matrix.os }}
@@ -55,9 +55,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Install Qt
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: '6.5.0'
         modules: 'qtbase'
@@ -86,7 +86,7 @@ jobs:
         lcov --list coverage.info
         
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         file: tests/coverage.info
         fail_ci_if_error: false

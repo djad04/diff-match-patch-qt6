@@ -91,11 +91,12 @@ QString newText = result.first;
 
 ## Configuration(you can play with the configuration for different results)
 
+```cpp
 // Modified settings for maximum precision (default configuration)
-dmp.Diff_Timeout = 0.0f;        // NO TIMEOUT - Full precision mode
-dmp.Match_Threshold = 0.5f;     // Standard accuracy threshold
-dmp.Match_Distance = 100000;    // Extended search distance for large files
-dmp.Match_MaxBits = 8192;       // Large pattern support for complex diffs
+dmp.Diff_Timeout = 0.0f;          // NO TIMEOUT - Full precision mode
+dmp.Match_Threshold = 0.5f;       // Standard accuracy threshold
+dmp.Match_Distance = 100000;      // Extended search distance for large files
+dmp.Match_MaxBits = 8192;         // Large pattern support for complex diffs
 dmp.Patch_DeleteThreshold = 0.5f; // Standard patch reliability
 ```
 

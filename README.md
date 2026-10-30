@@ -1,4 +1,4 @@
-# 🚀 diff-match-patch-qt6
+#  diff-match-patch-qt6
 
 [![Qt Version](https://img.shields.io/badge/Qt-6.0%2B-green.svg)](https://www.qt.io/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -12,14 +12,14 @@
 Unlike the original Qt4 version, this port eliminates deprecated components and optimizes the core algorithm for modern C++ and Qt6, offering robust support for diffing, patching, and pattern matching with enhanced precision for development workflows.
 
 
-## 🚨🔴 MODIFIED ALGORITHM WARNING
+## MODIFIED ALGORITHM WARNING
 
-> ⚠️ **This implementation has been _modified from Google’s original_ to prioritize _maximum precision and detailed diffs_, with _timeout limitations removed_ for complete accuracy.**
+> **This implementation has been _modified from Google’s original_ to prioritize _maximum precision and detailed diffs_, with _timeout limitations removed_ for complete accuracy.**
 
-✅ **Best for**: Code files up to **1MB (~12,000 lines)** where human-readable, precise results are essential.  
-⚠️ **For larger files**: Consider performance-optimized algorithms like **Myers** or **Patience diff**.
+**Best for**: Code files up to **1MB (~12,000 lines)** where human-readable, precise results are essential.  
+**For larger files**: Consider performance-optimized algorithms like **Myers** or **Patience diff**.
 
-🧩 However, _those alternatives are more complex to integrate_, often requiring **multiple source files and additional dependencies**, whereas **this implementation is extremely easy to set up and use**, making it ideal for lightweight or embedded tools.
+ However, _those alternatives are more complex to integrate_, often requiring **multiple source files and additional dependencies**, whereas **this implementation is extremely easy to set up and use**, making it ideal for lightweight or embedded tools.
 
 ## Features
 
@@ -72,7 +72,7 @@ QString newText = result.first;
 | **100 KB** | 4.35 s | 26,366 ops | 90.5% | Good precision |
 | **500 KB** | 10.60 s | 71,041 ops | 95.1% | Excellent precision |
 
-⚠️ Note: An efficiency of 95% does not mean that 5% of changes were missed — all changes are found, but the algorithm may not always find the shortest or cleanest sequence of edits possible. It’s about optimality, not correctness.
+ Note: An efficiency of 95% does not mean that 5% of changes were missed — all changes are found, but the algorithm may not always find the shortest or cleanest sequence of edits possible. It’s about optimality, not correctness.
 
 ### **Noise Rate Analysis (50KB test file)**
 | Change Rate | Processing Time | Operations | Efficiency |
@@ -120,7 +120,7 @@ dmp.Patch_DeleteThreshold = 0.5f; // Standard patch reliability
 - **Unicode support**: Full support for international text and emoji
 - **Configurable thresholds**: Adjustable matching sensitivity and performance tuning
 
-## 🔴 **Usage Recommendations**
+##  **Usage Recommendations**
 
 ### **Ideal Use Cases (≤1MB files, ~12,000 lines of code)**
 - **Source code comparison**: Perfect for development workflows
